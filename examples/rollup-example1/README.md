@@ -43,6 +43,7 @@ export default {
     file: 'dist/bundle.js',
     format: 'es',
     name:'libName', // 输出格式为iife和umd格式时使用
+    sourcemap:false , // OutputOptions.sourcemap?: boolean | "inline" | "hidden"
   },
   plugins:[]
 }
@@ -62,6 +63,8 @@ rollup --config rollup.config.js
   - `output`支持配置为一个数组
 - 支持异步创建配置文件，导出`promise` || `promise.all`
 
-移除 node_modules
+- 环境变量
 
-全局变量
+- 全局变量 `@rollup/plugin-replace`、`rollup-plugin-consts`
+
+- 移除 node_modules
