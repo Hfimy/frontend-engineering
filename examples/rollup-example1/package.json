@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup --config rollup.config.js"
+    "build:test": "__ENV__=test rollup --config rollup.config.js",
+    "build:prod": "__ENV__=prod rollup --config rollup.config.js",
+    "build-test": "rollup --config rollup.config.js --env test"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +16,8 @@
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
-    "rollup": "^2.33.1"
+    "rollup": "^2.33.1",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
     "lodash-es": "^4.17.15"
