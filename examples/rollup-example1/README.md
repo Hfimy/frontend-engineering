@@ -15,9 +15,9 @@
     - 处理`node_modules`第三方模块：`@rollup/plugin-node-resolve`
     - 将`CommonJS`模块转换为`ES Modules`模块：`@rollup/plugin-commonjs`（注：babel 插件要放置在 commonjs 插件前面）
     - 处理`json`资源：`@rollup/plugin-json`
-    - 支持 ts 开发：`@rollup/plugin-typescript`
+    - 支持 ts 开发：`rollup-plugin-typescript2`
     - 生产环境代码压缩：`rollup-plugin-terser`
-    - 配置全局常量：`@rollup/plugin-replace`、`rollup-plugin-consts`
+    - 配置全局常量：`@rollup/plugin-replace`、`rollup-plugin-consts`（注：replace 应放在其它插件之前，以便它们可以应用优化）
 
 - 内置`tree-shaking`摇树优化，静态分析代码中的`import`，移除未使用的代码
 
@@ -37,10 +37,11 @@
 
 ## 配置文件
 
-```javascript
-// rollup.config.js
+```js
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import typescript from 'rollup-plugin-typescript2';
+import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import { terser } from 'rollup-plugin-terser';
 
@@ -51,43 +52,66 @@ const isProd = __ENV__ === 'prod';
 
 /** @type {import('rollup').RollupOptions}*/
 const config = {
-  input: 'src/index.js',
+  input: 'src/index.ts',
+  external: ['jquery'],
   output: [
     {
       file: 'dist/bundle.iife.js',
       format: 'iife',
-      name: 'globalVarName', // 全局变量名称，输出格式为iife和umd格式时使用
+      name: 'libraryName', // 全局变量名称，输出格式为iife和umd格式时使用
       sourcemap: !isProd, // OutputOptions.sourcemap?: boolean | "inline" | "hidden"
       banner: '/* banner */',
-      globals: {},
+      globals: {
+        jquery: '$',
+      },
     },
     {
       file: 'dist/bundle.es.js',
       format: 'es',
       sourcemap: !isProd,
       banner: '/* banner */',
-      globals: {},
+    },
+    {
+      file: 'dist/bundle.cjs.js',
+      format: 'cjs',
+      sourcemap: !isProd,
+      banner: '/* banner */',
     },
     {
       file: 'dist/bundle.umd.js',
       format: 'umd',
-      name: 'globalVarName', // 全局变量名称，输出格式为iife和umd格式时使用
+      name: 'libraryName', // 全局变量名称，输出格式为iife和umd格式时使用
       sourcemap: !isProd,
       banner: '/* banner */',
-      globals: {},
+      globals: {
+        jquery: '$',
+      },
     },
   ],
-  plugins: [resolve(), commonjs(), json(), isProd && terser()],
+  plugins: [
+    typescript(),
+    replace({
+      __ENV__: JSON.stringify(__ENV__),
+      __BUILD_DATE__: () => Date.now(),
+    }),
+    resolve(),
+    commonjs(),
+    json(),
+    isProd && terser(),
+  ],
 };
 
 export default config;
 ```
 
+**npm script 命令**
+
 ```
-__ENV__=test rollup --config rollup.config.js
+"build:test": "__ENV__=test rollup --config rollup.config.js",
+
 ```
 
-**虽然配置文件运行在 Node.js 环境下，但 rollup 会自动处理配置文件，所以默认使用 ES Modules 语法。**
+**注：虽然配置文件运行在 Node.js 环境下，但 rollup 会自动处理配置文件，所以默认使用 ES Modules 语法。**
 
 ### 可能遇到的实际打包场景
 
@@ -120,8 +144,49 @@ __ENV__=test rollup --config rollup.config.js
     };
     ```
 
-- 全局常量 `@rollup/plugin-replace`、`rollup-plugin-consts`
+    **npm script 命令**
 
-- 移除 node_modules
+    ```
+    "build-test": "rollup --config rollup.config.js --env test"
+    ```
+
+- 配置（替换）全局常量 `@rollup/plugin-replace`、`rollup-plugin-consts`
+
+  ```
+  /* replace 应放在其它插件之前，以便它们可以应用优化 */
+  plugins: [
+    replace({
+      __ENV__: JSON.stringify(__ENV__),
+      __BUILD_DATE__: () => Date.now(),
+    }),
+  ]
+  ```
+
+- **external** 设置外部依赖，这些外部依赖模块不会打包到 bundler 里
+
+  - format 格式为 es、cjs、amd 时，外部依赖模块仍由对应的模块导入方式导入
+  - format 格式为 iife、umd 时，需要配合 output.globals 使用
+
+  ```
+  external: ['jquery'],
+  output: [
+    {
+      file: 'dist/bundle.iife.js',
+      format: 'iife',
+      name: 'libraryName',
+      globals: {
+        jquery: '$', // [externalId]: 'globalVariable'. 即外部模块ID：全局变量，依赖的外部模块将由传入的全局变量表示
+      },
+    },
+  ```
 
 - 使用 typescript
+
+```
+/* typescript插件放在其它plugin前面，在根目录下新建tsconfig.json配置文件 */
+plugins: [
+    typescript(),
+]
+```
+
+- 手写 plugin
