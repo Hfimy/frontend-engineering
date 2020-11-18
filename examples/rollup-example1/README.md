@@ -11,13 +11,14 @@
   - 只支持处理相对路径的本地`ES Modules`模块，不支持`node_modules`第三方模块，不支持`CommonJS`模块
 
   - 其它的功能由插件支持，常用插件如
-    - 将高版本语法转译为目标版本的语法：`@rollup/plugin-babel`
+
     - 处理`node_modules`第三方模块：`@rollup/plugin-node-resolve`
     - 将`CommonJS`模块转换为`ES Modules`模块：`@rollup/plugin-commonjs`（注：babel 插件要放置在 commonjs 插件前面）
-    - 处理`json`资源：`@rollup/plugin-json`
+    - 将高版本语法转译为目标版本的语法：`@rollup/plugin-babel`
     - 支持 ts 开发：`rollup-plugin-typescript2`
+    - 配置（替换）全局常量：`@rollup/plugin-replace`、`rollup-plugin-consts`（注：replace 应放在其它插件之前，以便它们可以应用优化）
+    - 处理`json`资源：`@rollup/plugin-json`
     - 生产环境代码压缩：`rollup-plugin-terser`
-    - 配置全局常量：`@rollup/plugin-replace`、`rollup-plugin-consts`（注：replace 应放在其它插件之前，以便它们可以应用优化）
 
 - 内置`tree-shaking`摇树优化，静态分析代码中的`import`，移除未使用的代码
 
@@ -189,4 +190,4 @@ plugins: [
 ]
 ```
 
-- 手写 plugin
+- 自定义 plugin
