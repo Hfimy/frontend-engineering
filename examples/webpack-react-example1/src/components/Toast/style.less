@@ -1,0 +1,83 @@
+.custom-light-toast-container {
+  &.animation {
+    // 被遮盖了？
+    animation: custom-light-toast-fade-animation 1s linear;
+  }
+
+  .custom-light-toast-mask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: transparent;
+    z-index: 9999; // 置于最上层
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    .custom-light-toast-box {
+      // position: absolute;
+      // top: 240px;
+      // left: 50%;
+      // transform: translateX(-50%);
+
+      box-sizing: border-box;
+      margin-top: 240px;
+      min-width: 80px;
+      max-width: 80%;
+      padding: 8px 15px;
+      border-radius: 5px;
+      background-color: rgba(58, 58, 58, 0.9);
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .custom-light-toast-message {
+        font-size: 14px;
+        min-height: 20px;
+        line-height: 20px;
+        color: #fff;
+        text-align: center;
+        word-break: break-all;
+      }
+
+      .custom-light-toast-loading {
+        width: 36px;
+        height: 36px;
+        border: 2px solid #ccc;
+        border-left-color: #108ee9;
+        border-radius: 50%;
+        animation: custom-light-toast-loading-animation 1s linear infinite;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+@keyframes custom-light-toast-fade-animation {
+  0% {
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  95% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes custom-light-toast-loading-animation{
+  100% {
+    transform: rotate(360deg);
+  }
+}

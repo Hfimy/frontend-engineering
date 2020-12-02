@@ -1,0 +1,17 @@
+ {
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["prettier"],
+  "extends": ["plugin:prettier/recommended", "prettier/react", "prettier/@typescript-eslint"]
+}

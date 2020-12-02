@@ -176,7 +176,7 @@ export default config;
       format: 'iife',
       name: 'libraryName',
       globals: {
-        jquery: '$', // [externalId]: 'globalVariable'. 即外部模块ID：全局变量，依赖的外部模块将由传入的全局变量表示
+        jquery: '$', // [externalId]: 'globalVariable'. 即外部模块ID：全局变量，依赖的外部模块将由传入的全局变量替换
       },
     },
   ```
