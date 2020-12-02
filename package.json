@@ -1,0 +1,23 @@
+{
+  "name": "frontend-engineering",
+  "version": "1.0.0",
+  "description": "**关键词：前端工程化、模块化、打包构建、webpack、rollup**",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hfimy/frontend-engineering.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hfimy/frontend-engineering/issues"
+  },
+  "homepage": "https://github.com/Hfimy/frontend-engineering#readme"
+}
