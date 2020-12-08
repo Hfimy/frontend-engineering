@@ -7,16 +7,16 @@ export function updatePageTitle(title) {
     return;
   }
   document.title = title;
-  let mobile = navigator.userAgent.toLowerCase();
-  if (/iphone|ipad|ipod/.test(mobile)) {
-    let iframe = document.createElement('iframe');
-    iframe.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    iframe.style.display = 'none';
-    iframe.onload = function () {
-      setTimeout(function () {
-        iframe.remove();
+  const isIOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  if (isIOS) {
+    const i = document.createElement('iframe');
+    i.style.display = 'none';
+    i.src = '/favicon.ico';
+    i.onload = function () {
+      setTimeout(() => {
+        i.remove();
       }, 0);
     };
-    document.body.appendChild(iframe);
+    document.body.appendChild(i);
   }
 }
