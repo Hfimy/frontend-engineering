@@ -9,14 +9,14 @@ export function updatePageTitle(title) {
   document.title = title;
   const isIOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
   if (isIOS) {
-    const i = document.createElement('iframe');
-    i.style.display = 'none';
-    i.src = '/favicon.ico';
-    i.onload = function () {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = '/favicon.ico';
+    iframe.onload = function () {
       setTimeout(() => {
-        i.remove();
+        iframe.remove();
       }, 0);
     };
-    document.body.appendChild(i);
+    document.body.appendChild(iframe);
   }
 }
